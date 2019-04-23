@@ -150,6 +150,9 @@ num_scenarios(m::JuMP.Model)  = getStructure(m).num_scen::Int
 function getMyRank()
     myrank = 0;
     mysize = 1;
+    if @isdefined(MPI) && !MPI.Initialized()
+        MPI.Init()
+    end
     if @isdefined(MPI) && MPI.Initialized() && !MPI.Finalized()
         comm = MPI.COMM_WORLD
         mysize = MPI.Comm_size(comm)
